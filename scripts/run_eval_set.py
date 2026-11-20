@@ -72,14 +72,14 @@ from big_finance_harness.types import DatasetItem
 # Gateway with one shared API key. Edit this list to swap in / out specific snapshots.
 DEFAULT_MODELS: list[tuple[str, str]] = [
     # Closed frontier
-    ("gpt55", "openai:gpt-5.5"),
+    ("gemini", "gemini/gemini-2.5-flash-lite"),
 ]
 
 # Judge runs in a different quota pool than the closed-Anthropic models under test, so
 # parallel grading doesn't contend with eval. Gemini 3.1 Pro is also outside the
 # Anthropic and OpenAI families that dominate the model lineup, giving the paper a
 # cleaner "judge is not the system under test" story for ~9 of 11 models.
-DEFAULT_JUDGE = "vertex:gemini-3.1-pro-preview"
+DEFAULT_JUDGE = "gemini/gemini-2.5-flash-lite"
 
 
 def _sha256_file(path: Path) -> str:
