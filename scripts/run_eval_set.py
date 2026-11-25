@@ -67,18 +67,18 @@ from big_finance_harness.types import DatasetItem
 # Default model lineup — one entry per snapshot we'll evaluate. Label is what shows up in
 # filenames and the manifest; model_id is the harness's `provider:snapshot` form.
 #
-# Closed-frontier (6) routed through the labs' first-party APIs (Anthropic via Vertex,
-# OpenAI direct, Gemini via Vertex). Open-frontier (5) routed through the Vercel AI
-# Gateway with one shared API key. Edit this list to swap in / out specific snapshots.
+# Closed-frontier (7) routed through the labs' direct APIs (Anthropic, OpenAI, Google).
+# Open-frontier (5) routed through the Vercel AI Gateway with one shared API key.
+# Edit this list to swap in / out specific snapshots.
 DEFAULT_MODELS: list[tuple[str, str]] = [
     # Closed frontier
-    ("opus47", "vertex-anthropic:claude-opus-4-7"),
-    ("sonnet46", "vertex-anthropic:claude-sonnet-4-6"),
+    ("opus47", "anthropic:claude-opus-4-7"),
+    ("sonnet46", "anthropic:claude-sonnet-4-6"),
     ("gpt55", "openai:gpt-5.5"),
     ("gpt54mini", "openai:gpt-5.4-mini"),
-    ("gem31pro", "vertex:gemini-3.1-pro-preview"),
-    ("gem3flash", "vertex:gemini-3-flash-preview"),
-    ("gem35flash", "vertex:gemini-3.5-flash"),
+    ("gem31pro", "google:gemini-3.1-pro-preview"),
+    ("gem3flash", "google:gemini-3-flash-preview"),
+    ("gem35flash", "google:gemini-3.5-flash"),
     # Open frontier (Vercel AI Gateway)
     ("kimi-k26", "gateway:moonshotai/kimi-k2.6"),
     ("deepseek-v4-pro", "gateway:deepseek/deepseek-v4-pro"),
