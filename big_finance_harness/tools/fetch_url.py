@@ -74,8 +74,8 @@ def _truncate_tokens(text: str, max_tokens: int) -> str:
     return head + "\n\n... [truncated]"
 
 
-def _html_to_text(html: str) -> str:
-    soup = BeautifulSoup(html, "lxml")
+def _html_to_text(html: str, *, is_xml: bool = False) -> str:
+    soup = BeautifulSoup(html, "xml" if is_xml else "lxml")
     for tag in soup(["script", "style", "noscript", "iframe", "header", "footer", "nav"]):
         tag.decompose()
     text = soup.get_text(separator="\n")
@@ -262,10 +262,18 @@ class FetchUrlTool(Tool):
             raise ToolError(f"fetch_url failed: {e}") from e
 
         ct = resp.headers.get("content-type", "")
+        normalized_ct = ct.split(";", 1)[0].strip().lower()
+        is_xml = (
+            normalized_ct.endswith("/xml")
+            or normalized_ct.endswith("+xml")
+            or resp.text.lstrip().lower().startswith("<?xml")
+        )
         # PDF detection takes priority — some servers return PDF bytes with a generic or
         # missing content-type, but the magic bytes are unambiguous.
         if _looks_like_pdf(url, ct, resp.content[:8]):
             body = _pdf_to_text(resp.content)
+        elif is_xml:
+            body = _html_to_text(resp.text, is_xml=True)
         elif "html" in ct or url.endswith((".htm", ".html")) or "<html" in resp.text[:1000].lower():
             body = _html_to_text(resp.text)
         else:

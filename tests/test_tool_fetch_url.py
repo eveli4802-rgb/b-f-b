@@ -1,5 +1,8 @@
 
+import warnings
+
 import pytest
+from bs4 import XMLParsedAsHTMLWarning
 from pytest_httpx import HTTPXMock
 
 from big_finance_harness.tools.base import ToolError
@@ -28,6 +31,19 @@ async def test_fetch_url_returns_text(httpx_mock: HTTPXMock):
     out = await tool.run({"url": "https://example.com/aapl-10k"})
     assert "Operating income" in out
     assert "114,301" in out
+
+
+@pytest.mark.asyncio
+async def test_fetch_url_parses_xml_even_when_labeled_html(httpx_mock: HTTPXMock):
+    httpx_mock.add_response(
+        url="https://example.com/data",
+        text='<?xml version="1.0"?><root><item>Revenue was $100.</item></root>',
+        headers={"content-type": "text/html"},
+    )
+    with warnings.catch_warnings():
+        warnings.simplefilter("error", XMLParsedAsHTMLWarning)
+        out = await FetchUrlTool().run({"url": "https://example.com/data"})
+    assert "Revenue was $100." in out
 
 
 @pytest.mark.asyncio
