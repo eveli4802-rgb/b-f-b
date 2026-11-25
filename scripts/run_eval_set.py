@@ -72,7 +72,19 @@ from big_finance_harness.types import DatasetItem
 # Gateway with one shared API key. Edit this list to swap in / out specific snapshots.
 DEFAULT_MODELS: list[tuple[str, str]] = [
     # Closed frontier
-    ("gemini", "google:gemini-3.5-flash-lite"),
+    ("opus47", "vertex-anthropic:claude-opus-4-7"),
+    ("sonnet46", "vertex-anthropic:claude-sonnet-4-6"),
+    ("gpt55", "openai:gpt-5.5"),
+    ("gpt54mini", "openai:gpt-5.4-mini"),
+    ("gem31pro", "vertex:gemini-3.1-pro-preview"),
+    ("gem3flash", "vertex:gemini-3-flash-preview"),
+    ("gem35flash", "vertex:gemini-3.5-flash"),
+    # Open frontier (Vercel AI Gateway)
+    ("kimi-k26", "gateway:moonshotai/kimi-k2.6"),
+    ("deepseek-v4-pro", "gateway:deepseek/deepseek-v4-pro"),
+    ("glm-51", "gateway:zai/glm-5.1"),
+    ("gemma4-31b", "gateway:google/gemma-4-31b-it"),
+    ("qwen36-27b", "gateway:alibaba/qwen3.6-27b"),
 ]
 
 # Judge runs in a different quota pool than the closed-Anthropic models under test, so
